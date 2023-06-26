@@ -17,7 +17,7 @@ private:
     uint16_t pixelSize;
     uint16_t height;
     uint16_t width;
-    uint16_t pixels[224 * 256]{};
+    uint16_t pixels[200 * 400]{};
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* texture;

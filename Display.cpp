@@ -11,17 +11,19 @@ Display::Display(const char* Title, uint16_t _width, uint16_t _height, uint16_t 
     height = _height;
     pixelSize = _pixelSize;
 
+    memset(pixels, 0, sizeof(pixels));
+
     SDL_Init(SDL_INIT_EVERYTHING);
     window = SDL_CreateWindow(Title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              width * pixelSize, height * pixelSize, 0);
+                              width, height, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
-    SDL_SetWindowMinimumSize(window, width * pixelSize, height * pixelSize);
-    SDL_RenderSetLogicalSize(renderer, width * pixelSize, height * pixelSize);
+    SDL_SetWindowMinimumSize(window, width, height);
+    SDL_RenderSetLogicalSize(renderer, width, height);
     SDL_RenderSetIntegerScale(renderer, static_cast<SDL_bool>(1));
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR4444,
-                                SDL_TEXTUREACCESS_STREAMING, height * pixelSize, width * pixelSize);
+                                SDL_TEXTUREACCESS_STREAMING, width, height);
 
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
@@ -30,12 +32,16 @@ Display::Display(const char* Title, uint16_t _width, uint16_t _height, uint16_t 
 void Display::Update(uint8_t *VRAM) {
     uint16_t ColorToDraw;
 
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y += 8) {
+    for (int x = 0; x < (width); x++) {
+        for (int y = 0; y < (height); y += 8) {
             uint8_t VRAMByte = VRAM[x * (height >> 3) + (y >> 3)];
 
             for (int bit = 0; bit < 8; bit++) {
-                ColorToDraw = colors[((VRAMByte >> bit) & 1)];
+                ColorToDraw = colors[0];
+
+                if ((VRAMByte >> bit) & 1) {
+                    ColorToDraw = colors[1];
+                }
 
                 uint8_t CoordX = x;
                 uint8_t CoordY = (height - 1 - (y + bit));

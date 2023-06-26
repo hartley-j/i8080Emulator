@@ -31,6 +31,7 @@ public:
 
     uint8_t* MemoryMap[0x10000]{}; // 64K
     void LoadInMemory(uint8_t* Buffer, uint16_t Address, int BufferSize);
+    void testVRAMFlash(uint16_t height, uint16_t width);
 private:
     uint8_t memory[0x10000]{};
 };

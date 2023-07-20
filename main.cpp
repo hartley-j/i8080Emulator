@@ -4,11 +4,11 @@
 #include <thread>
 #include <SDL.h>
 
-#define HEIGHT 400
-#define WIDTH 200
+#define HEIGHT 256
+#define WIDTH 224
 
 int main(int argc, char** argv) {
-    Display Disp = Display("Display Test", WIDTH, HEIGHT, 10);
+    Display Disp = Display("Display Test", WIDTH, HEIGHT);
     MMU mmu = MMU(1);
 
     SDL_Event ev;
@@ -16,7 +16,6 @@ int main(int argc, char** argv) {
     while(ev.type != SDL_QUIT) {
         Disp.Update(mmu.VRAM);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        mmu.testVRAMFlash(HEIGHT, WIDTH);
 
         SDL_PollEvent(&ev);
     }

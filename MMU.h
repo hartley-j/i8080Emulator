@@ -26,12 +26,11 @@ public:
     uint16_t VRAMAddress = 0x2400;
     uint16_t RAMMirrorAddress = 0x4000;
 
-    // Useful pointer to VRAM
+    // Useful pointer to VRAM (7K size)
     uint8_t* VRAM = memory + VRAMAddress;
 
     uint8_t* MemoryMap[0x10000]{}; // 64K
     void LoadInMemory(uint8_t* Buffer, uint16_t Address, int BufferSize);
-    void testVRAMFlash(uint16_t height, uint16_t width) const;
 private:
     uint8_t memory[0x10000]{};
 };

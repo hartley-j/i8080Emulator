@@ -25,16 +25,3 @@ void MMU::LoadInMemory(uint8_t *Buffer, uint16_t Address, int BufferSize) {
     for (int i = 0; i < BufferSize; i++)
         *(MemoryMap[Address + i]) = Buffer[i];
 }
-
-void MMU::testVRAMFlash(uint16_t height, uint16_t width) {
-    uint8_t ColorToDraw = 0x00;
-
-    for (int x=0; x<width; x++) {
-        for (int y=0; y<height; y++) {
-            uint8_t VRAMByte = VRAM[x * (height >> 3) + (y >> 3)];
-
-            ColorToDraw = VRAMByte ^ 0xff;
-            VRAM[x * (height >> 3) + (y >> 3)] = ColorToDraw;
-        }
-    }
-}

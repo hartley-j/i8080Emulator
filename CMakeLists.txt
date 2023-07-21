@@ -16,7 +16,7 @@ if(UNIX)
     include_directories(${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
 endif(UNIX)
 
-add_executable(i8080Emulator main.cpp MMU.cpp MMU.h Display.cpp Display.h)
+add_executable(i8080Emulator main.cpp MMU.cpp MMU.h Display.cpp Display.h CPU.cpp CPU.h)
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} SDL2main SDL2)

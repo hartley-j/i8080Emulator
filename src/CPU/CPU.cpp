@@ -2,7 +2,7 @@
 // Created by hartl on 20/07/2023.
 //
 
-#include "CPU.h"
+#include "CPU/CPU.h"
 
 
 CPU::CPU(uint8_t ConsoleMode) {

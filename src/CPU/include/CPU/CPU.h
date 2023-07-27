@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include "MMU.h"
+#include "../../../MMU/include/MMU/MMU.h"
 
 // defining structures to represent the state of the system
 // ConditionCodes: z = zero flag, s = sign flag, p = parity bit, cy and ac = carry flags

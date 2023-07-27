@@ -2,7 +2,7 @@
 // Created by hartl on 25/06/2023.
 //
 
-#include "MMU.h"
+#include "MMU/MMU.h"
 
 MMU::MMU(uint8_t ConsoleMode) {
     memset (memory, 0, sizeof(memory));

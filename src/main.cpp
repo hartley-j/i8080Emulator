@@ -1,5 +1,5 @@
-#include "Display.h"
-#include "MMU.h"
+#include "Display/include/Display/Display.h"
+#include "MMU/include/MMU/MMU.h"
 #include <chrono>
 #include <thread>
 #include <SDL.h>

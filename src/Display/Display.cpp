@@ -2,7 +2,7 @@
 // Created by hartl on 25/06/2023.
 //
 
-#include "Display.h"
+#include "Display/Display.h"
 
 Display::Display(const char* Title, int _width, int _height, int _pixelSize) {
     screenWidth = _width;

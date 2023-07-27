@@ -28,3 +28,5 @@ endif(WIN32)
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 endif(UNIX)
+
+add_subdirectory(googletest)

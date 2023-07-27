@@ -12,11 +12,11 @@
 // defining structures to represent the state of the system
 // ConditionCodes: z = zero flag, s = sign flag, p = parity bit, cy and ac = carry flags
 typedef struct ConditionCodes {
-    uint8_t z:1;
-    uint8_t s:1;
-    uint8_t p:1;
-    uint8_t cy:1;
-    uint8_t ac:1;
+    uint8_t Zero:1;
+    uint8_t Sign:1;
+    uint8_t Parity:1;
+    uint8_t Carry:1;
+    uint8_t AuxiliaryCarry:1;
 } ConditionCodes;
 
 typedef struct Registers16Bit {
@@ -42,7 +42,7 @@ typedef struct State8080 {
 
 class CPU {
 public:
-    explicit CPU(uint8_t ConsoleMode);
+    CPU(uint8_t ConsoleMode);
 
     // I/O
     uint8_t InPort[4]{};

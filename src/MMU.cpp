@@ -21,7 +21,7 @@ MMU::MMU(uint8_t ConsoleMode) {
     }
 }
 
-void MMU::LoadInMemory(uint8_t *Buffer, uint16_t Address, int BufferSize) {
+void MMU::loadInMemory(uint8_t *Buffer, uint16_t Address, int BufferSize) {
     for (int i = 0; i < BufferSize; i++)
         *(MemoryMap[Address + i]) = Buffer[i];
 }

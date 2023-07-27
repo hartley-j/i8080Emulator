@@ -11,17 +11,17 @@
 
 class Display {
 public:
-    Display(const char* Title, uint16_t _width, uint16_t _height);
-    void Update(uint8_t* VRAM);
+    Display(const char* Title, int _width, int _height, int _pixelSize);
+    ~Display();
+    void updateScreen(uint8_t* VRAM);
 private:
-    int height;
-    int width;
-    void* pixels[256 * 224 * 32]{};
+    int screenHeight;
+    int screenWidth;
+    int pixelSize;
     SDL_Window* window;
     SDL_Renderer* renderer;
-    SDL_Surface* surface;
-
-    void UpdatePixel(int x, int y, Uint32 color);
+    SDL_Texture* screenTexture;
+    uint32_t mapPixelValueToColor(uint8_t pixelValue);
 };
 
 #endif //I8080EMULATOR_DISPLAY_H

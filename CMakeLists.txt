@@ -16,17 +16,6 @@ if(UNIX)
     include_directories(${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
 endif(UNIX)
 
-include(FetchContent)
-FetchContent_Declare(
-        googletest
-        URL https://github.com/google/googletest/archive/40412d85124f7c6f3d88454583c4633e5e10fc8c.zip
-)
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
-enable_testing()
-
 add_executable(i8080Emulator src/main.cpp src/MMU.cpp src/MMU.h src/Display.cpp src/Display.h src/CPU.cpp src/CPU.h)
 
 target_link_libraries(${PROJECT_NAME} gtest_main)

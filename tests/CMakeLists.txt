@@ -16,9 +16,7 @@ add_executable(unit_tests
 target_link_libraries(unit_tests
 PRIVATE
         GTest::GTest
-        CPU
         Display
-        MMU
 )
 
 add_test(unit_gtests unit_tests)

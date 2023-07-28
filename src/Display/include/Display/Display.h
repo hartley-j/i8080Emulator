@@ -4,7 +4,7 @@
 
 #include <cstdint>
 #include <cstdio>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #ifndef I8080EMULATOR_DISPLAY_H
 #define I8080EMULATOR_DISPLAY_H

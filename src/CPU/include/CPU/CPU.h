@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include "../../../MMU/include/MMU/MMU.h"
+#include "MMU/MMU.h"
 
 // defining structures to represent the state of the system
 // ConditionCodes: z = zero flag, s = sign flag, p = parity bit, cy and ac = carry flags
@@ -36,13 +36,12 @@ typedef struct State8080 {
     uint8_t* l = ((uint8_t*) &regs.hl);
     uint16_t sp{};
     uint16_t pc{};
-    MMU* memory{};
     struct ConditionCodes cc{};
 } State8080;
 
 class CPU {
 public:
-    CPU(uint8_t ConsoleMode);
+    explicit CPU(uint8_t ConsoleMode, MMU* _mmu);
 
     // I/O
     uint8_t InPort[4]{};
@@ -56,8 +55,8 @@ public:
     uint8_t ConsoleMode{};
 private:
     State8080 state;
+    MMU* mmu;
 
-    void Emulate8080(State8080 *state);
     static uint8_t Parity(uint8_t i);
 
     // used for debugging

@@ -5,7 +5,7 @@
 #include "MMU/MMU.h"
 
 MMU::MMU(uint8_t ConsoleMode) {
-    memset (memory, 0, sizeof(memory));
+    memset(memory, 0, sizeof(memory));
     memset(VRAM, 0, RAMMirrorAddress - VRAMAddress);
 
     for (int i = 0x0000; i < 0x4000; i++) { // ROM + RAM + VRAM

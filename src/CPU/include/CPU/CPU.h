@@ -57,7 +57,9 @@ private:
     State8080 state;
     MMU* mmu;
 
-    static uint8_t Parity(uint8_t i);
+    static uint8_t Parity(uint8_t byte);
+
+    void LXI(uint8_t **Reg, uint16_t data);
 
     // used for debugging
     static int Disassemble8080Print(unsigned char *CodeBuffer, int pc);

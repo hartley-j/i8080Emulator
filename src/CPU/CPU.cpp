@@ -10,6 +10,19 @@ CPU::CPU(uint8_t ConsoleMode, MMU* _mmu) {
     mmu = _mmu;
 }
 
+uint8_t CPU::Parity(uint8_t byte) {
+    byte ^= byte >> 8;
+    byte ^= byte >> 4;
+    byte ^= byte >> 2;
+    byte ^= byte >> 1;
+    return (~byte) & 1;
+}
+
+void CPU::LXI(uint8_t **Reg, uint16_t data) {
+    **Reg = (data & 0x00FF);
+    **(Reg - 1) = (data & 0xFF00) >> 8;
+}
+
 int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
 /**
  * Prints instruction and argument from 8080 assembly code
@@ -280,12 +293,4 @@ int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
     printf("\n");
 
     return opbytes;
-}
-
-uint8_t CPU::Parity(uint8_t i) {
-    i ^= i >> 8;
-    i ^= i >> 4;
-    i ^= i >> 2;
-    i ^= i >> 1;
-    return (~i) & 1;
 }

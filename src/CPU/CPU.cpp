@@ -10,6 +10,27 @@ CPU::CPU(uint8_t ConsoleMode, MMU* _mmu) {
     mmu = _mmu;
 }
 
+void CPU::LXI(uint8_t *Reg, uint16_t data) {
+    *Reg = (data & 0x00FF);
+    *(Reg - 1) = (data & 0xFF00) >> 8;
+}
+
+void CPU::Emulate8080() {
+
+    uint8_t *opcode = this->mmu->MemoryMap[this->state.pc];
+
+    switch(*opcode) {
+        case 0x01:
+            LXI(this->state.b, this->CombineChars(opcode[1], opcode[2]));
+        case 0x11:
+            LXI(this->state.d, this->CombineChars(opcode[1], opcode[2]));
+        case 0x21:
+            LXI(this->state.h, this->CombineChars(opcode[1], opcode[2]));
+        case 0x31:
+            LXI(((uint8_t*) &this->state.sp), this->CombineChars(opcode[1], opcode[2]));
+    }
+}
+
 uint8_t CPU::Parity(uint8_t byte) {
     byte ^= byte >> 8;
     byte ^= byte >> 4;
@@ -18,9 +39,8 @@ uint8_t CPU::Parity(uint8_t byte) {
     return (~byte) & 1;
 }
 
-void CPU::LXI(uint8_t **Reg, uint16_t data) {
-    **Reg = (data & 0x00FF);
-    **(Reg - 1) = (data & 0xFF00) >> 8;
+uint16_t CPU::CombineChars(uint8_t a, uint8_t b) {
+    return (a << 8) & b;
 }
 
 int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
@@ -294,3 +314,4 @@ int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
 
     return opbytes;
 }
+

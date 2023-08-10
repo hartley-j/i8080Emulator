@@ -329,7 +329,7 @@ int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
     return opbytes;
 }
 
-void CPU::PrintState() {
+void CPU::PrintState() const {
     printf("-----States-----\n");
     printf("-Regs:-\n");
     printf("BC: %hu\n", this->state.bc);

@@ -53,7 +53,7 @@ public:
     uint8_t ConsoleMode{};
 
     // Testing methods
-    void PrintState();
+    void PrintState() const;
     State8080 DumpState();
     void SetStates(State8080 set);
 private:

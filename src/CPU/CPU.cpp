@@ -10,25 +10,39 @@ CPU::CPU(uint8_t ConsoleMode, MMU* _mmu) {
     mmu = _mmu;
 }
 
-void CPU::LXI(uint8_t *Reg, uint16_t data) {
-    *Reg = (data & 0x00FF);
-    *(Reg - 1) = (data & 0xFF00) >> 8;
+void CPU::LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2) {
+    *Reg = ((uint16_t) (Byte1 << 8)) | ((uint16_t) Byte2);
 }
 
 void CPU::Emulate8080() {
 
     uint8_t *opcode = this->mmu->MemoryMap[this->state.pc];
+    uint16_t data;
 
     switch(*opcode) {
         case 0x01:
-            LXI(this->state.b, this->CombineChars(opcode[1], opcode[2]));
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.bc, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
         case 0x11:
-            LXI(this->state.d, this->CombineChars(opcode[1], opcode[2]));
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.de, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
         case 0x21:
-            LXI(this->state.h, this->CombineChars(opcode[1], opcode[2]));
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.hl, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
         case 0x31:
-            LXI(((uint8_t*) &this->state.sp), this->CombineChars(opcode[1], opcode[2]));
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.sp, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
     }
+
+    this->state.pc += 1;
 }
 
 uint8_t CPU::Parity(uint8_t byte) {
@@ -40,7 +54,7 @@ uint8_t CPU::Parity(uint8_t byte) {
 }
 
 uint16_t CPU::CombineChars(uint8_t a, uint8_t b) {
-    return (a << 8) & b;
+    return ((uint16_t) (a << 8)) | ((uint16_t) b);
 }
 
 int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
@@ -315,3 +329,26 @@ int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
     return opbytes;
 }
 
+void CPU::PrintState() {
+    printf("-----States-----\n");
+    printf("-Regs:-\n");
+    printf("BC: %hu\n", this->state.bc);
+    printf("DE: %hu\n", this->state.de);
+    printf("HL: %hu\n", this->state.hl);
+    printf("Stack ptr: %hu\n", this->state.sp);
+    printf("Prog cntr: %hu\n", this->state.pc);
+    printf("-Condition Codes:-\n");
+    printf("Zero: %d\n", this->state.cc.Zero);
+    printf("Sign: %d\n", this->state.cc.Sign);
+    printf("Parity: %d\n", this->state.cc.Parity);
+    printf("Carry: %d\n", this->state.cc.Carry);
+    printf("Aux. Carry: %d\n", this->state.cc.AuxiliaryCarry);
+}
+
+void CPU::SetStates(State8080 set) {
+    this->state = set;
+}
+
+State8080 CPU::DumpState() {
+    return this->state;
+}

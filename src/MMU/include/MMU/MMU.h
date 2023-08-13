@@ -30,7 +30,7 @@ public:
     uint8_t* VRAM = memory + VRAMAddress;
 
     uint8_t* MemoryMap[0x10000]{}; // 64K
-    void loadInMemory(const uint8_t* Buffer, uint16_t Address, int BufferSize);
+    void LoadInMemory(const uint8_t* Buffer, uint16_t Address, int BufferSize);
 private:
     uint8_t memory[0x10000]{};
 };

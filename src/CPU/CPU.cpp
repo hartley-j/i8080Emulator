@@ -45,7 +45,7 @@ void CPU::Emulate8080() {
 
         // MOV Operations
         case 0x56:
-            MOV(this->state.b, this->mmu->MemoryMap[this->state.hl]);
+            MOV(this->state.d, this->mmu->MemoryMap[this->state.hl]);
             break;
         case 0x5E:
             MOV(this->state.e, this->mmu->MemoryMap[this->state.hl]);

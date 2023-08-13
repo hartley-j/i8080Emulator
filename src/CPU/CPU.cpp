@@ -10,16 +10,18 @@ CPU::CPU(uint8_t ConsoleMode, MMU* _mmu) {
     mmu = _mmu;
 }
 
-void CPU::LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2) {
-    *Reg = ((uint16_t) (Byte1 << 8)) | ((uint16_t) Byte2);
-}
-
 void CPU::Emulate8080() {
 
     uint8_t *opcode = this->mmu->MemoryMap[this->state.pc];
     uint16_t data;
 
     switch(*opcode) {
+
+        // NOP
+        case 0x00:
+            break;
+
+        // LXI Operations
         case 0x01:
             // data = CPU::CombineChars(opcode[1], opcode[2]);
             LXI(&this->state.bc, opcode[1], opcode[2]);
@@ -39,6 +41,35 @@ void CPU::Emulate8080() {
             // data = CPU::CombineChars(opcode[1], opcode[2]);
             LXI(&this->state.sp, opcode[1], opcode[2]);
             this->state.pc += 2;
+            break;
+
+        // MOV Operations
+        case 0x56:
+            MOV(this->state.b, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x5E:
+            MOV(this->state.e, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x66:
+            MOV(this->state.h, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x6F:
+            MOV(this->state.l, this->state.a);
+            break;
+        case 0x77:
+            MOV(this->mmu->MemoryMap[this->state.hl], this->state.a);
+            break;
+        case 0x7A:
+            MOV(this->state.a, this->state.d);
+            break;
+        case 0x7B:
+            MOV(this->state.a, this->state.e);
+            break;
+        case 0x7C:
+            MOV(this->state.a, this->state.h);
+            break;
+        case 0x7E:
+            MOV(this->state.a, this->mmu->MemoryMap[this->state.hl]);
             break;
     }
 
@@ -352,3 +383,12 @@ void CPU::SetStates(State8080 set) {
 State8080 CPU::DumpState() {
     return this->state;
 }
+
+void CPU::LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2) {
+    *Reg = ((uint16_t) (Byte1 << 8)) | ((uint16_t) Byte2);
+}
+
+void CPU::MOV(uint8_t *Reg1, const uint8_t *Reg2) {
+    *Reg1 = *Reg2;
+}
+

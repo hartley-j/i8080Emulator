@@ -24,6 +24,8 @@ typedef struct State8080 {
     uint16_t bc{};
     uint16_t de{};
     uint16_t hl{};
+    uint16_t a_real{};
+    uint8_t* a = ((uint8_t*) &a_real) + 1;
     uint8_t* b = ((uint8_t*) &bc) + 1;
     uint8_t* c = ((uint8_t*) &bc);
     uint8_t* d = ((uint8_t*) &de) + 1;
@@ -61,6 +63,8 @@ private:
     MMU* mmu;
 
     static void LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2);
+    static void MOV(uint8_t *Reg1, const uint8_t *Reg2);
+
 
     static uint8_t Parity(uint8_t byte);
     static uint16_t CombineChars(uint8_t a, uint8_t b);

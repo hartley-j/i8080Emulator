@@ -64,7 +64,7 @@ private:
 
     static void LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2);
     static void MOV(uint8_t *Reg1, const uint8_t *Reg2);
-
+    static void DCR(uint8_t *Reg);
 
     static uint8_t Parity(uint8_t byte);
     static uint16_t CombineChars(uint8_t a, uint8_t b);

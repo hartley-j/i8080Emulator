@@ -74,6 +74,10 @@ TEST_F(CPUTest, TestMOV) {
     EXPECT_EQ(*Memory.MemoryMap[Memory.RAMAddress], 0xFA);
 }
 
+TEST_F(CPUTest, TestMVI) {
+    MMU Memory = MMU(1);
+}
+
 State8080 EmulateThenDump(CPU* cpu, int cycles) {
     for (int i = 0; i <= cycles; i++) {
         cpu->Emulate8080();

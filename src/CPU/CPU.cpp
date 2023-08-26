@@ -21,6 +21,14 @@ void CPU::Emulate8080() {
         case 0x00:
             break;
 
+        // DCR Operations
+        case 0x05:
+            DCR(this->state.b);
+            break;
+        case 0x0D:
+            DCR(this->state.c);
+            break;
+
         // LXI Operations
         case 0x01:
             // data = CPU::CombineChars(opcode[1], opcode[2]);
@@ -390,5 +398,9 @@ void CPU::LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2) {
 
 void CPU::MOV(uint8_t *Reg1, const uint8_t *Reg2) {
     *Reg1 = *Reg2;
+}
+
+void CPU::DCR(uint8_t *Reg) {
+    *Reg -= 1;
 }
 

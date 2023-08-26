@@ -10,6 +10,92 @@ CPU::CPU(uint8_t ConsoleMode, MMU* _mmu) {
     mmu = _mmu;
 }
 
+void CPU::Emulate8080() {
+
+    uint8_t *opcode = this->mmu->MemoryMap[this->state.pc];
+    uint16_t data;
+
+    switch(*opcode) {
+
+        // NOP
+        case 0x00:
+            break;
+
+        // DCR Operations
+        case 0x05:
+            DCR(this->state.b);
+            break;
+        case 0x0D:
+            DCR(this->state.c);
+            break;
+
+        // LXI Operations
+        case 0x01:
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.bc, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
+        case 0x11:
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.de, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
+        case 0x21:
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.hl, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
+        case 0x31:
+            // data = CPU::CombineChars(opcode[1], opcode[2]);
+            LXI(&this->state.sp, opcode[1], opcode[2]);
+            this->state.pc += 2;
+            break;
+
+        // MOV Operations
+        case 0x56:
+            MOV(this->state.d, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x5E:
+            MOV(this->state.e, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x66:
+            MOV(this->state.h, this->mmu->MemoryMap[this->state.hl]);
+            break;
+        case 0x6F:
+            MOV(this->state.l, this->state.a);
+            break;
+        case 0x77:
+            MOV(this->mmu->MemoryMap[this->state.hl], this->state.a);
+            break;
+        case 0x7A:
+            MOV(this->state.a, this->state.d);
+            break;
+        case 0x7B:
+            MOV(this->state.a, this->state.e);
+            break;
+        case 0x7C:
+            MOV(this->state.a, this->state.h);
+            break;
+        case 0x7E:
+            MOV(this->state.a, this->mmu->MemoryMap[this->state.hl]);
+            break;
+    }
+
+    this->state.pc += 1;
+}
+
+uint8_t CPU::Parity(uint8_t byte) {
+    byte ^= byte >> 8;
+    byte ^= byte >> 4;
+    byte ^= byte >> 2;
+    byte ^= byte >> 1;
+    return (~byte) & 1;
+}
+
+uint16_t CPU::CombineChars(uint8_t a, uint8_t b) {
+    return ((uint16_t) (a << 8)) | ((uint16_t) b);
+}
+
 int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
 /**
  * Prints instruction and argument from 8080 assembly code
@@ -282,10 +368,39 @@ int CPU::Disassemble8080Print(unsigned char *CodeBuffer, int pc) {
     return opbytes;
 }
 
-uint8_t CPU::Parity(uint8_t i) {
-    i ^= i >> 8;
-    i ^= i >> 4;
-    i ^= i >> 2;
-    i ^= i >> 1;
-    return (~i) & 1;
+void CPU::PrintState() const {
+    printf("-----States-----\n");
+    printf("-Regs:-\n");
+    printf("BC: %hu\n", this->state.bc);
+    printf("DE: %hu\n", this->state.de);
+    printf("HL: %hu\n", this->state.hl);
+    printf("Stack ptr: %hu\n", this->state.sp);
+    printf("Prog cntr: %hu\n", this->state.pc);
+    printf("-Condition Codes:-\n");
+    printf("Zero: %d\n", this->state.cc.Zero);
+    printf("Sign: %d\n", this->state.cc.Sign);
+    printf("Parity: %d\n", this->state.cc.Parity);
+    printf("Carry: %d\n", this->state.cc.Carry);
+    printf("Aux. Carry: %d\n", this->state.cc.AuxiliaryCarry);
 }
+
+void CPU::SetStates(State8080 set) {
+    this->state = set;
+}
+
+State8080 CPU::DumpState() {
+    return this->state;
+}
+
+void CPU::LXI(uint16_t *Reg, uint8_t Byte1, uint8_t Byte2) {
+    *Reg = ((uint16_t) (Byte1 << 8)) | ((uint16_t) Byte2);
+}
+
+void CPU::MOV(uint8_t *Reg1, const uint8_t *Reg2) {
+    *Reg1 = *Reg2;
+}
+
+void CPU::DCR(uint8_t *Reg) {
+    *Reg -= 1;
+}
+

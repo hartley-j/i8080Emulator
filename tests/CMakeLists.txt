@@ -9,13 +9,24 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
-add_executable(unit_tests
+add_executable(DisplayTest
         DisplayTest.cpp)
+add_executable(CPUTest
+        CPUTest.cpp)
 
-target_link_libraries(unit_tests
+target_link_libraries(DisplayTest
 PRIVATE
         GTest::GTest
+        SDL2::SDL2main
+        SDL2::SDL2-static
         Display
 )
 
-add_test(unit_gtests unit_tests)
+target_link_libraries(CPUTest
+PRIVATE
+        GTest::GTest
+        CPU
+)
+
+add_test(CPUTest CPUTest)
+add_test(DisplayTest DisplayTest)

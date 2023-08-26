@@ -7,10 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 enable_testing()
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/buildtools/sdl2)
 find_package(SDL2 REQUIRED)
-include_directories(${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
-
-link_libraries(${SDL2_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} SDL2::Main)
 
 add_subdirectory(src)
 add_subdirectory(tests)
